@@ -1,5 +1,1 @@
 console.log("This is a popup!")
-console.debug("This is a popup2!")
-console.warn("This is a popup2!")
-console.info("This is a popup2!")
-console.info("This is a popup2!")
