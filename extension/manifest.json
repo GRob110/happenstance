@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Happenstance",
+  "description": "record web browsing location",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "images/happenstance_icon_16.png"
+  }
+}
