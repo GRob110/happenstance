@@ -14,10 +14,7 @@
     "16": "images/happenstance-icon-16.png",
     "128": "images/happenstance-icon-128.png"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
   "permissions": [
-    "activeTab"
+    "history"
   ]
 }
