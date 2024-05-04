@@ -29,6 +29,6 @@
       "profile",
       "email"
     ],
-    "redirect_uris": ["https://happenstance.chromiumapp.org/callback"]
+    "redirect_uris": ["https://kkomglfeeehgbkbaemfpbjplgdolafih.chromiumapp.org/callback"]
   }
 }
