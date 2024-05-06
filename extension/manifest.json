@@ -19,9 +19,6 @@
     "storage",
     "identity"
   ],
-  "background": {
-    "service_worker": "background.js"
-  },
   "oauth2": {
     "client_id": "NRfoOLMeJcJLxqS5i2carZc9EmP3ODaV",
     "scopes": [
