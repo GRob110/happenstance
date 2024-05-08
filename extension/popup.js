@@ -1,10 +1,10 @@
 const baseAuthUrl = "https://dev-6q2l8zmczwn7un71.us.auth0.com/authorize";
 const queryParams = new URLSearchParams({
     client_id: "NRfoOLMeJcJLxqS5i2carZc9EmP3ODaV",
-    response_type: "code",
+    response_type: "token",
     redirect_uri: chrome.identity.getRedirectURL(),
     scope: "openid profile email",
-    code_challenge_method: "S256"
+    response_mode: "fragment"
 });
 const authUrl = `${baseAuthUrl}?${queryParams.toString()}`;
 
@@ -12,38 +12,35 @@ console.log("Gnerated Auth URL: ", authUrl);
 
 function handleAuthResult(redirectUrl) {
     const url = new URL(redirectUrl);
-    const urlParams = new URLSearchParams(url.search);
-    const authCode = urlParams.get('code');
+    // Auth0 returns the access token in the URL hash fragment
+    const hashParams = new URLSearchParams(url.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
 
-    console.log('Auth code:', authCode);
+    console.log('Auth code:', accessToken);
 
-    if (!authCode) {
-        console.error('No auth code found');
+    if (!accessToken) {
+        console.error('No access token found');
         return;
     }
 
-    // Exchange the auth code for an access token
-    chrome.runtime.sendMessage({
-        type: 'exchangeAuthCode',
-        authCode: authCode
-    }, (response) => {
-        if (chrome.runtime.lastError) {
-            console.error('Error handling response:', chrome.runtime.lastError.message);
-            return;
+    // Fetch user info using access token
+    fetch('https://dev-6q2l8zmczwn7un71.us.auth0.com/userinfo', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
         }
-        if (response.success) {
-            console.log('User profile:', response.profile);
-            chrome.storage.local.set({username: response.profile.name});
-        } else {
-            console.error('Token exchange failed');
-        }
+    }).then(response => response.json())
+    .then(profile => {
+        console.log('User profile:', profile);
+        console.log('Username:', profile.name);
+        chrome.storage.local.set({username: profile.name});
+    }).catch(error => {
+        console.error('Profile request error:', error);
     });
 }
 
 function beginAuth() {
     console.log('Beginning auth flow');
     console.log("Generated Redirect URL: ", chrome.identity.getRedirectURL());
-
 
     chrome.identity.launchWebAuthFlow({
         url: authUrl,
