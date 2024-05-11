@@ -49,6 +49,7 @@ app.get('/profile', (req, res) => {
         res.json({
             isAuthenticated: true,
             user: req.oidc.user,
+            name: req.oidc.user.name,
         });
     } else {
         res.json({
