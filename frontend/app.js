@@ -12,7 +12,7 @@ const config = {
     baseURL: 'http://localhost:3000',
     clientID: process.env.AUTH0_CLIENT_ID,
     issuerBaseURL: process.env.AUTH0_DOMAIN,
-    clientSecret: '${process.env.AUTH0_CLIENT_SECRET}',
+    clientSecret: process.env.AUTH0_CLIENT_SECRET,
     authorizationParams: {
         response_type: 'code',
         scope: 'openid profile email',
