@@ -51,7 +51,6 @@ app.use(express.json());
 // Routes
 app.post('/api/history', (req, res) => {
     const history = req.body.history;
-    console.log('received history', history);
 
     if (!history) {
         console.log('no history provided');
