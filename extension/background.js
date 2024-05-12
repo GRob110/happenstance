@@ -5,7 +5,6 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log('Message received', message);
     if (message.type === 'login') {
         console.log('login clicked');
         chrome.tabs.create({ url: loginUrl });

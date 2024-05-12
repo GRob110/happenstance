@@ -20,19 +20,21 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.sendMessage({ type: 'fetchUser' }, (response) => {
         if (response.user.isAuthenticated) {
             console.log('User found', response.user.name);
-            userInfo.textContext = `Hello, ${response.user.name}`;
+            userInfo.textContent = `Logged in as ${response.user.name}`;
             loginButton.style.display = 'none';
             logoutButton.style.display = 'block';
         } else if (!response.user.isAuthenticated){
             console.log('Not logged in');
-            userInfo.textContext = 'Not logged in';
+            userInfo.textContent = 'Not logged in';
             loginButton.style.display = 'block';
             logoutButton.style.display = 'none';
         } else if (response.error) {
             console.error('Error fetching user', response.error);
-            userInfo.textContext = `Error: ${response.error}`;
+            userInfo.textContent = `Error: ${response.error}`;
             loginButton.style.display = 'block';
             logoutButton.style.display = 'none';
+        } else {
+            console.error('something else');
         }
     });
 });
