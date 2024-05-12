@@ -1,3 +1,5 @@
+const loginUrl = 'http://localhost:3000/';
+
 chrome.runtime.onInstalled.addListener(() => {
     console.log('Extension Installed');
 });
@@ -6,7 +8,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log('Message received', message);
     if (message.type === 'login') {
         console.log('login clicked');
-        const loginUrl = 'http://localhost:3000/';
+        chrome.tabs.create({ url: loginUrl });
+    } else if (message.type === 'logout') {
+        console.log('logout clicked');
         chrome.tabs.create({ url: loginUrl });
     } else if (message.type === 'fetchUser') {
         console.log('fetchUser');
@@ -20,12 +24,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 return response.json();
             })
             .then(data => {
-                console.log('fetchUser data', data);
                 sendResponse({ user: data });
+                return true;
             })
             .catch(error => {
                 console.error('Error fetching user', error);
                 sendResponse({ error: error.message });
+                return false;
             });
         return true;
     }

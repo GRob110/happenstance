@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const loginButton = document.getElementById('loginBtn')
+    const loginButton = document.getElementById('loginBtn');
+    const logoutButton = document.getElementById('logoutBtn');
+    const userInfo = document.getElementById('user-info');
+
     if (loginButton) {
         loginButton.addEventListener('click', () => {
             chrome.runtime.sendMessage({ type: 'login' });
@@ -7,13 +10,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            chrome.runtime.sendMessage({ type: 'logout' });
+            console.log('logout clicked');
+        });
+    }
+
     chrome.runtime.sendMessage({ type: 'fetchUser' }, (response) => {
-        console.log('fetchUser awaiting');
-        if (response.user) {
+        if (response.user.isAuthenticated) {
             console.log('User found', response.user.name);
-            document.getElementById('user-info').textContext = `Hello, ${response.user.name}`;
+            userInfo.textContext = `Hello, ${response.user.name}`;
+            loginButton.style.display = 'none';
+            logoutButton.style.display = 'block';
+        } else if (!response.user.isAuthenticated){
+            console.log('Not logged in');
+            userInfo.textContext = 'Not logged in';
+            loginButton.style.display = 'block';
+            logoutButton.style.display = 'none';
         } else if (response.error) {
-            document.getElementById('user-info').textContext = `Error: ${response.error}`;
+            console.error('Error fetching user', response.error);
+            userInfo.textContext = `Error: ${response.error}`;
+            loginButton.style.display = 'block';
+            logoutButton.style.display = 'none';
         }
     });
 });
