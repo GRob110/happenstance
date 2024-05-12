@@ -1,7 +1,9 @@
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
+const connectDB = require('./db');
 const { auth } = require('express-openid-connect');
+const User = require('./models/User');
 require('dotenv').config();
 
 const app = express();
@@ -49,7 +51,24 @@ app.use(cors());
 
 app.use(express.json());
 
+connectDB();
+
+
 // Routes
+app.post('/user', async (req, res) => {
+    const { username } = req.body;
+
+    try {
+        let user = new User({ username });
+        await user.save();
+        res.status(201).send(user);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+// TODO:add route to history and friends
+
 app.post('/api/history', (req, res) => {
     const history = req.body.history;
 
