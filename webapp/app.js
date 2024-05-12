@@ -19,6 +19,9 @@ const config = {
     },
 };
 
+// TODO: Store user histories in a database
+const userHistories = {};
+
 // Validate configuration
 if (!config.issuerBaseURL.startsWith('https://')) {
   throw new Error('"issuerBaseURL" must be a valid URI and start with "https://".');
@@ -40,6 +43,31 @@ app.use(auth(config));
 app.use(express.static('public'));
 
 // Routes
+app.post('/api/history', (req, res) => {
+    const history = req.body;
+
+    if (!history) {
+        return res.status(400).json({ message: 'No history provided' });
+    }
+
+    userHistories['testUser'] = [];
+
+    userHistories['testUser'].push(...history);
+
+    res.status(200).json({ message: 'History saved' });
+});
+
+//example fetch history
+app.get('/api/history', (req, res) => {
+    const user = req.params.username;
+
+    if (!userHistories[user]) {
+        return res.status(404).json({ message: 'No history found' });
+    }
+
+    res.status(200).json({ history: userHistories[user] });
+});
+
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
