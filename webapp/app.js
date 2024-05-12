@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const app = express();
 
+// TODO: change secret keys
 const config = {
     authRequired: false,
     auth0Logout: true,
