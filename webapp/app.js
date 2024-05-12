@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const cors = require('cors');
 const { auth } = require('express-openid-connect');
 require('dotenv').config();
 
@@ -42,17 +43,25 @@ app.use(auth(config));
 
 app.use(express.static('public'));
 
+// TODO: limit access to the API to authenticated users
+app.use(cors());
+
+app.use(express.json());
+
 // Routes
 app.post('/api/history', (req, res) => {
-    const history = req.body;
+    const history = req.body.history;
+    console.log('received history', history);
 
     if (!history) {
+        console.log('no history provided');
         return res.status(400).json({ message: 'No history provided' });
     }
 
     userHistories['testUser'] = [];
 
     userHistories['testUser'].push(...history);
+    console.log('saved history', userHistories['testUser']);
 
     res.status(200).json({ message: 'History saved' });
 });

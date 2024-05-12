@@ -12,6 +12,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } else if (message.type === 'logout') {
         console.log('logout clicked');
         chrome.tabs.create({ url: loginUrl });
+    } else if (message.type === 'sync') {
+        console.log('sync clicked');
+        sendHistoryToWebApp();
     } else if (message.type === 'fetchUser') {
         console.log('fetchUser');
         fetch('http://localhost:3000/profile', {
@@ -47,7 +50,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         
         if (history.length > 10) {
             // remove entries older than 10
-            history.pop();
+            history.shift();
         }
     }
 });
@@ -56,6 +59,7 @@ function sendHistoryToWebApp() {
     chrome.storage.local.get({ history: [] }, (result) => {
         history = result.history || [];
         console.log('Sending history', history);
+        console.log('Sending history', JSON.stringify({history}));
         //TODO connect to a user
         fetch('http://localhost:3000/api/history', {
             method: 'POST',

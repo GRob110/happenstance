@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById('logoutBtn');
     const userInfo = document.getElementById('user-info');
     const historyList = document.getElementById('history-list');
+    const historySyncButton = document.getElementById('history-sync');
 
     if (loginButton) {
         loginButton.addEventListener('click', () => {
@@ -15,6 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutButton.addEventListener('click', () => {
             chrome.runtime.sendMessage({ type: 'logout' });
             console.log('logout clicked');
+        });
+    }
+
+    if (historySyncButton) {
+        historySyncButton.addEventListener('click', () => {
+            chrome.runtime.sendMessage({ type: 'sync' });
+            console.log('sync clicked');
         });
     }
 
