@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.getElementById('loginBtn');
     const logoutButton = document.getElementById('logoutBtn');
     const userInfo = document.getElementById('user-info');
+    const historyList = document.getElementById('history-list');
+    const historySyncButton = document.getElementById('history-sync');
 
     if (loginButton) {
         loginButton.addEventListener('click', () => {
@@ -14,6 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutButton.addEventListener('click', () => {
             chrome.runtime.sendMessage({ type: 'logout' });
             console.log('logout clicked');
+        });
+    }
+
+    if (historySyncButton) {
+        historySyncButton.addEventListener('click', () => {
+            chrome.runtime.sendMessage({ type: 'sync' });
+            console.log('sync clicked');
         });
     }
 
@@ -36,5 +45,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.error('something else');
         }
+    });
+
+    chrome.storage.local.get({ history: [] }, (result) => {
+        console.log('loading history', result.history);
+        const history = result.history;
+        history.forEach((entry) => {
+            const li = document.createElement('li');
+            li.textContent = `${entry}`;
+            historyList.appendChild(li);
+        });
     });
 });
