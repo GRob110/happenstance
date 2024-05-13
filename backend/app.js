@@ -18,7 +18,7 @@ app.use(sessionMiddleware);
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(config.mongoURI);
 
 // Routes
 app.use('/', routes);

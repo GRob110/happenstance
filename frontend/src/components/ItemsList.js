@@ -4,7 +4,7 @@ import { getUsers, gethistory, addhistory } from '../utils/api';
 const ItemsList = () => {
     const [users, setUsers] = useState([]);
     const [history, setHistory] = useState([]);
-    const [username, setUsername] = useState('testUser');
+    const username = useState('testUser');
 
     useEffect(() => {
         const fetchUsers = async () => {

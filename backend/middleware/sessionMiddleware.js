@@ -12,13 +12,13 @@ store.on('error', function(error) {
 });
 
 const sessionMiddleware = session({
-    secret: config.SESSION_SECRET,
+    secret: config.session.secret,
     resave: false,
     saveUninitialized: false,
     store: store,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-        secure: false, // TODO: Set to true when using https
+        secure: 'auto',
     }
 });
 
