@@ -3,7 +3,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const config = require('../config/keys.js');
 
 const store = new MongoDBStore({
-    uri: config.MONGO_URI,
+    uri: config.mongoURI,
     collection: 'sessions'
 });
 
@@ -14,11 +14,11 @@ store.on('error', function(error) {
 const sessionMiddleware = session({
     secret: config.session.secret,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: store,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-        secure: 'auto',
+        secure: false, //TODO: change to true in production
     }
 });
 

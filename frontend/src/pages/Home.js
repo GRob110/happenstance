@@ -9,6 +9,8 @@ import logo from '../logo.png';
 
 const Home = () => {
     const { isAuthenticated } = useAuth0();
+    
+    console.log("Authenticated:", isAuthenticated);
 
     return (
         <div className="home">

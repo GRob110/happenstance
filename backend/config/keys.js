@@ -8,6 +8,10 @@ module.exports = {
         clientSecret: '25Sc8kRlXVgKLq6HdQYOs4cZ8ZwXg8x_5NQsl_eYmS8zvS70oH_f7We4u-EosspB',
         secret: 'cc5936c2bb14a98ee609d3eb6adbc039fe07f6cc309cd9c81fe8c6ce33a7878a',
         baseURL: 'http://localhost:5000',
+        afterCallback: (req, res, session, decodedState) => {
+            console.log('afterCallback');
+            return '/';
+        },
         authorizationParams: {
             response_type: 'code',
             scope: 'openid profile email',

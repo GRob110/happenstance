@@ -12,7 +12,11 @@ root.render(
     <Auth0Provider
       domain={authConfig.domain}
       clientId={authConfig.clientId}
-      redirectUri={authConfig.redirectUri}
+      authorizationParams={{
+        redirect_uri: authConfig.redirectUri,
+        response_type: 'code',
+        scope: 'openid profile email',
+      }}
     >
       <App />
     </Auth0Provider>
