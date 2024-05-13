@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import Home from './pages/Home';
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
+import Header from './components/Layout/Header';
+import Footer from './components/Layout/Footer';
 import ItemsList from './components/ItemsList';
 import Profile from './components/Auth/Profile';
 import Login from './components/Auth/Login';
@@ -20,12 +20,14 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Header />
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/users" component={ItemsList} />
-          <Route path="/profile" component={Profile} />
-        </Switch>
+        <Header isAuthenticated={isAuthenticated} />
+        <main>
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/users" component={ItemsList} />
+            <Route path="/profile" component={Profile} />
+          </Switch>
+        </main>
         <Footer />
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
@@ -36,6 +38,7 @@ function App() {
           <>
             <Logout />
             <Profile />
+            <ItemsList />
           </>
         ) : (
           <Login />
