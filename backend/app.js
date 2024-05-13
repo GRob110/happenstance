@@ -1,33 +1,27 @@
 const express = require('express');
-const session = require('express-session');
 const cors = require('cors');
-const connectDB = require('./db');
 const mongoose = require('mongoose');
-const { auth } = require('express-openid-connect');
+const path = require('path');
 const config = require('./config/keys');
+const routes = require('./routes');
 const authMiddleware = require('./middleware/authMiddleware');
+const sessionMiddleware = require('./middleware/sessionMiddleware');
 
 const app = express();
 
 // Middleware
-app.use(session({
-    secret: config.secret,
-    resave: false,
-    saveUninitialized: true,
-}));
-
+app.use(express.json());
 app.use(authMiddleware);
+app.use(sessionMiddleware);
 
 // TODO: limit access to the API to authenticated users
 app.use(cors());
 
-app.use(express.json());
-
+// Connect to MongoDB
 mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Routes
-app.use('/', require('./routes'));
-
+app.use('/', routes);
 
 // Serve static files from React app
 app.use(express.static(path.join(__dirname, 'frontend/build')));
