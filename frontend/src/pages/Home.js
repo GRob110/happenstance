@@ -5,7 +5,7 @@ import Profile from '../components/Auth/Profile';
 import Login from '../components/Auth/Login';
 import Logout from '../components/Auth/Logout';
 
-import logo from '../logo.png';
+//import logo from '../logo.png';
 
 const Home = () => {
     const { isAuthenticated } = useAuth0();
@@ -14,14 +14,14 @@ const Home = () => {
 
     return (
         <div className="home">
-            <img src={logo} className="App-logo" alt="logo" />
+            {/*<img src={logo} className="App-logo" alt="logo" />*/}
             <h1>Happenstance</h1>
             <p>Browse with Friends!</p>
             {isAuthenticated ? (
                 <>
                     <Logout />
-                    <Profile />
-                    <ItemsList />
+                    {/*<Profile />*/}
+                    {/*<ItemsList />*/}
                 </>
             ) : (
                 <Login />

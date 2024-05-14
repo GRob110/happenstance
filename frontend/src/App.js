@@ -5,23 +5,23 @@ import Home from './pages/Home';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
 
-import './App.css';
+//import './App.css';
 
 
 
 function App() {
-  const { isAuthenticated} = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   return (
     <Router>
       <div className="App">
-        <Header isAuthenticated={isAuthenticated} />
+        {/*<Header isAuthenticated={isAuthenticated} />*/}
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>
         </main>
-        <Footer />
+        {/*<Footer />*/}
       </div>
     </Router>
   );

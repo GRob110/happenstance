@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 //const mongoose = require('mongoose');
 //const sessionMiddleware = require('./middleware/sessionMiddleware');
 //const { auth, requiresAuth } = require('express-openid-connect');
@@ -13,13 +14,15 @@ const app = express();
 
 app.use(authMiddleware);
 
-app.get('/', /*requiresAuth(),*/ (req, res) => {
+/*
+app.get('/', (req, res) => {
     if (req.oidc.isAuthenticated()) {
         res.send(`Hello ${req.oidc.user.name}, you are logged in! <a href="/logout">Logout</a>`);
     } else {
         res.send('Hello, please <a href="/login">login</a>');
     }
 });
+*/
 
 /*
 app.get('/logout', (req, res) => {
@@ -32,6 +35,13 @@ app.get('/login', (req, res) => {
     res.oidc.login();
 });
 */
+
+// Serve static files from React app
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/frontend/build', 'index.html'));
+});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
