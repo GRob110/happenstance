@@ -4,11 +4,10 @@ import { Route, Routes } from 'react-router-dom';
 import { HomePage } from './pages/home-page';
 import { NotFoundPage } from './pages/not-found-page';
 import { PageLoader } from './components/page-loader';
-//import { AuthenticationGuard } from './components/authentication-guard';
-import './App.css'
+
+window.console.log('app.tsx');
 
 export const App: React.FC = () => {
-  window.console.log('app.tsx');
 
   const { isLoading } = useAuth0();
 
@@ -19,6 +18,8 @@ export const App: React.FC = () => {
       </div>
     );
   }
+
+  window.console.log('app.tsx rendered');
 
   return (
     <Routes>
