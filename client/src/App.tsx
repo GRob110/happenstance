@@ -1,34 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Route, Routes } from 'react-router-dom';
+import { HomePage } from './pages/home-page';
+import { NotFoundPage } from './pages/not-found-page';
+import { PageLoader } from './components/page-loader';
+//import { AuthenticationGuard } from './components/authentication-guard';
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+export const App: React.FC = () => {
+  window.console.log('app.tsx');
+
+  const { isLoading } = useAuth0();
+
+  if (isLoading) {
+    return (
+      <div className="page-layout">
+        <PageLoader />
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/callback" element={<HomePage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   )
 }
 
