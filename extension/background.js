@@ -1,4 +1,4 @@
-const loginUrl = 'http://localhost:3000/';
+const loginUrl = 'http://localhost:5000/';
 let history = [];
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendHistoryToWebApp();
     } else if (message.type === 'fetchUser') {
         console.log('fetchUser');
-        fetch('http://localhost:3000/profile', {
+        fetch('http://localhost:5000/profile', {
             credentials: 'include',
         })
             .then(response => {
@@ -61,7 +61,7 @@ function sendHistoryToWebApp() {
         console.log('Sending history', history);
         console.log('Sending history', JSON.stringify({history}));
         //TODO connect to a user
-        fetch('http://localhost:3000/api/history', {
+        fetch('http://localhost:5000/api/history', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
