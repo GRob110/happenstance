@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.getElementById('loginBtn');
     const logoutButton = document.getElementById('logoutBtn');
     const userInfo = document.getElementById('user-info');
-    const historyList = document.getElementById('history-list');
-    const historySyncButton = document.getElementById('history-sync');
+    //const historyList = document.getElementById('history-list');
+    //const historySyncButton = document.getElementById('history-sync');
 
     if (loginButton) {
         loginButton.addEventListener('click', () => {
@@ -19,12 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /*
     if (historySyncButton) {
         historySyncButton.addEventListener('click', () => {
             chrome.runtime.sendMessage({ type: 'sync' });
             console.log('sync clicked');
         });
     }
+    */
 
     chrome.runtime.sendMessage({ type: 'fetchUser' }, (response) => {
         if (response.user.isAuthenticated) {
@@ -47,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /*
     chrome.storage.local.get({ history: [] }, (result) => {
         console.log('loading history', result.history);
         const history = result.history;
@@ -56,4 +59,5 @@ document.addEventListener('DOMContentLoaded', () => {
             historyList.appendChild(li);
         });
     });
+    */
 });

@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Happenstance",
+  "description": "record web browsing location",
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "images/happenstance-icon-16.png",
+      "128": "images/happenstance-icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "images/happenstance-icon-16.png",
+    "128": "images/happenstance-icon-128.png"
+  },
+  "permissions": [
+    "scripting",
+    "history",
+    "storage",
+    "identity",
+    "cookies",
+    "tabs"
+  ],
+  "oauth2": {
+    "client_id": "NRfoOLMeJcJLxqS5i2carZc9EmP3ODaV",
+    "scopes": [
+      "openid",
+      "profile",
+      "email"
+    ]
+  },
+  "host_permissions": [
+    "http://localhost/*"
+  ]
+}
