@@ -34,10 +34,32 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('logout clicked');
     });
 
+    async function fetchMessage(token) {
+        console.log('fetching message');
+        try {
+            const response = await fetch(`${API_SERVER_URL}/api/messages/protected`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            });
+            if (!response.ok) {
+              throw new Error('Network response was not ok');  
+            }
+            const data = await response.json();
+            console.log('message info', data);
+            return data;
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+            return error;
+        }
+    }
+
     async function fetchUserInfo(token) {
         console.log('fetching user info');
         try {
-            const response = await fetch(`${API_SERVER_URL}/api/messages/protected`, {
+            const response = await fetch(`https://${AUTH0_DOMAIN}/userinfo`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -58,9 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function displayUserInfo(token) {
         console.log('fetching user info');
-        const message = await fetchUserInfo(token);
+        const message = await fetchMessage(token);
+        const userInfo = await fetchUserInfo(token);
         console.log('message', message);
-        userInfoDiv.textContent = message.text;
+        console.log('userInfo', userInfo);
+        userInfoDiv.textContent = `message: ${message.text}, user: ${userInfo.name}`;
         userInfoDiv.style.display = 'block';
         loginButton.style.display = 'none';
         logoutButton.style.display = 'block';
