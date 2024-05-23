@@ -19,7 +19,8 @@
     "storage",
     "identity",
     "cookies",
-    "tabs"
+    "tabs",
+    "activeTab"
   ],
   "oauth2": {
     "client_id": "wfn5Nvd0yz9pKynMz4lSxCLpMthiN38c",
@@ -34,5 +35,18 @@
   },
   "host_permissions": [
     "http://localhost/*"
-  ]
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

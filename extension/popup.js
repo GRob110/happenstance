@@ -1,40 +1,89 @@
+const AUTH0_DOMAIN = 'happenstance-dev.us.auth0.com';
+const AUTH0_CLIENT_ID = 'wfn5Nvd0yz9pKynMz4lSxCLpMthiN38c';
+const AUTH0_AUDIENCE = 'https://happenstance.gunnerbuilds.com';
+const API_SERVER_URL = 'http://localhost:6060';
+const LOGIN_URL = 'http://localhost:4040';
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.getElementById('loginBtn');
     const logoutButton = document.getElementById('logoutBtn');
-    const userInfo = document.getElementById('user-info');
+    const userInfoDiv = document.getElementById('user-info');
 
-    if (loginButton) {
-        loginButton.addEventListener('click', () => {
-            chrome.runtime.sendMessage({ type: 'login' });
-            console.log('login clicked');
-        });
-    }
+    console.log('popup.js loaded');
 
-    if (logoutButton) {
-        logoutButton.addEventListener('click', () => {
-            chrome.runtime.sendMessage({ type: 'logout' });
-            console.log('logout clicked');
-        });
-    }
-
-    chrome.runtime.sendMessage({ type: 'fetchUser' }, (response) => {
-        if (response.user.isAuthenticated) {
-            console.log('User found', response.user.name);
-            userInfo.textContent = `Logged in as ${response.user.name}`;
-            loginButton.style.display = 'none';
-            logoutButton.style.display = 'block';
-        } else if (!response.user.isAuthenticated){
-            console.log('Not logged in');
-            userInfo.textContent = 'Not logged in';
-            loginButton.style.display = 'block';
-            logoutButton.style.display = 'none';
-        } else if (response.error) {
-            console.error('Error fetching user', response.error);
-            userInfo.textContent = `Error: ${response.error}`;
-            loginButton.style.display = 'block';
-            logoutButton.style.display = 'none';
+    chrome.storage.local.get(['authToken'], (result) => {
+        console.log('authToken', result.authToken);
+        if (result.authToken) {
+            displayUserInfo(result.authToken);
         } else {
-            console.error('something else');
+            displayLogin();
         }
     });
+
+
+    loginButton.addEventListener('click', () => {
+        chrome.tabs.create({ url: LOGIN_URL });
+        console.log('login clicked');
+    });
+
+    logoutButton.addEventListener('click', () => {
+        chrome.tabs.create({ url: LOGIN_URL });
+        chrome.storage.local.remove(['authToken'], () => {
+            displayLogin();
+        });
+        console.log('logout clicked');
+    });
+
+    async function fetchUserInfo(token) {
+        console.log('fetching user info');
+        try {
+            const response = await fetch(`${API_SERVER_URL}/api/messages/protected`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            });
+            if (!response.ok) {
+              throw new Error('Network response was not ok');  
+            }
+            const data = await response.json();
+            console.log('user info', data);
+            return data;
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+            return error;
+        }
+    }
+
+    async function displayUserInfo(token) {
+        console.log('fetching user info');
+        const message = await fetchUserInfo(token);
+        console.log('message', message);
+        userInfoDiv.textContent = message.text;
+        userInfoDiv.style.display = 'block';
+        loginButton.style.display = 'none';
+        logoutButton.style.display = 'block';
+    }
+    
+    function displayLogin() {
+        console.log('displaying login');
+        userInfoDiv.style.display = 'none';
+        loginButton.style.display = 'block';
+        logoutButton.style.display = 'none';
+    }
+
+    /*
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        console.log('popup.js received message', request);
+        if (request.type === 'STORE_TOKEN') {
+            console.log('storing token', request.token);
+            chrome.storage.local.set({ auth0Token: request.token, auth0User: request.user }, () => {
+                sendResponse({ status: 'success' });
+                console.log('token stored');
+            });
+            return true;
+        }
+    });
+    */
 });

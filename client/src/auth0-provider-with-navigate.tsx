@@ -1,5 +1,5 @@
 //TODO: better understand the navigate part of this code
-import { Auth0Provider, AppState } from "@auth0/auth0-react";
+import { Auth0Provider, AppState, useAuth0 } from "@auth0/auth0-react";
 import React, { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,20 @@ export const Auth0ProviderWithNavigate = ({
 
     window.console.log({ domain, clientId, redirectUri, audience });
 
-    const onRedirectCallback = (appState?: AppState) => {
+    const onRedirectCallback = async (appState?: AppState) => {
+        const { getAccessTokenSilently, user } = useAuth0();
+        const token = await getAccessTokenSilently();
+
+        localStorage.setItem('auth_token', token);
+        localStorage.setItem('auth_user', JSON.stringify(user));
+
+        // TODO: change this to not error.
+        chrome.runtime.sendMessage({
+            type: 'SET_AUTH_TOKEN',
+            token: token,
+            user: user,
+        });
+
         navigate(appState?.returnTo || window.location.pathname);
     };
 

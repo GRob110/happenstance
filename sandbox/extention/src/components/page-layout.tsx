@@ -1,5 +1,5 @@
 import React from "react";
-import { NavBar } from "./navigation/desktop/nav-bar";
+import { NavBar } from "./navigation/nav-bar";
 
 window.console.log('page-layout.tsx');
 
