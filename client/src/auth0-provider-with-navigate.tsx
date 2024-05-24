@@ -23,17 +23,16 @@ export const Auth0ProviderWithNavigate = ({
 
     const onRedirectCallback = async (appState?: AppState) => {
         const { getAccessTokenSilently, user } = useAuth0();
-        const token = await getAccessTokenSilently();
 
-        localStorage.setItem('auth_token', token);
-        localStorage.setItem('auth_user', JSON.stringify(user));
+        const accessToken = await getAccessTokenSilently();
+        console.log('accessToken: ', accessToken);
 
-        // TODO: change this to not error.
-        chrome.runtime.sendMessage({
-            type: 'SET_AUTH_TOKEN',
-            token: token,
-            user: user,
-        });
+        window.postMessage({ 
+            type: 'STORE_TOKEN',
+            token: accessToken,
+            user: user
+        }, '*');
+        console.log('accessToken sent to extension');
 
         navigate(appState?.returnTo || window.location.pathname);
     };

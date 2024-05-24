@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { ApiResponse } from "../models/api-response";
 import { callExternalApi } from "./external-api.service";
 
-const apiServerUrl = import.meta.env.REACT_APP_API_SERVER_URL;
+const apiServerUrl = import.meta.env.VITE_APP_API_SERVER_URL;
 
 export const getPublicResource = async (): Promise<ApiResponse> => {
     const config: AxiosRequestConfig = {
@@ -34,6 +34,7 @@ export const getProtectedResource = async (
     };
     
     const { data, error } = (await callExternalApi({ config })) as ApiResponse;
+    console.log('get protected data: ', data);
     
     return {
         data,
