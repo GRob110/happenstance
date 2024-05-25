@@ -18,10 +18,9 @@ if (!(process.env.PORT && process.env.CLIENT_ORIGIN_URL)) {
 const PORT = parseInt(process.env.PORT, 10);
 const CLIENT_ORIGIN_URL = process.env.CLIENT_ORIGIN_URL;
 
+// TODO: move these to env
 const allowedOrigins = [
   CLIENT_ORIGIN_URL,
-  "chrome-extension://kkomglfeeehgbkbaemfpbjplgdolafih",
-  "chrome-extension://jklkhjfpoibimonkepmfiiebkpjiimkd",
   "chrome-extension://banbdjjklhcjnjekdbjkdgkinfobejhg"
 ];
 
