@@ -34,7 +34,6 @@ export const getProtectedResource = async (
     };
     
     const { data, error } = (await callExternalApi({ config })) as ApiResponse;
-    console.log('get protected data: ', data);
     
     return {
         data,

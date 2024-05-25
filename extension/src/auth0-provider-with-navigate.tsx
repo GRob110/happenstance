@@ -21,22 +21,7 @@ export const Auth0ProviderWithNavigate = ({
 
     window.console.log({ domain, clientId, redirectUri, audience });
 
-    const onRedirectCallback = async (appState?: AppState) => {
-        // TODO: figure out best way to send token to extension
-        /*
-        const { getAccessTokenSilently, user } = useAuth0();
-
-        const accessToken = await getAccessTokenSilently();
-        console.log('accessToken: ', accessToken);
-
-        window.postMessage({ 
-            type: 'STORE_TOKEN',
-            token: accessToken,
-            user: user
-        }, '*');
-        console.log('accessToken sent to extension');
-        */
-
+    const onRedirectCallback = (appState?: AppState) => {
         navigate(appState?.returnTo || window.location.pathname);
     };
 

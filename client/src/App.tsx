@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { HomePage } from './pages/home-page';
 import { NotFoundPage } from './pages/not-found-page';
 import { PageLoader } from './components/page-loader';
+//import { AuthenticationGuard } from './components/authentication-guard';
 
 window.console.log('app.tsx');
 
@@ -20,6 +21,17 @@ export const App: React.FC = () => {
   }
 
   window.console.log('app.tsx rendered');
+
+  /*
+      <Route
+        path="/"
+        element={<AuthenticationGuard component={HomePage} />}
+      />
+      <Route
+        path="/callback"
+        element={<AuthenticationGuard component={HomePage} />}
+      />
+  */
 
   return (
     <Routes>

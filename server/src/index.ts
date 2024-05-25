@@ -18,6 +18,13 @@ if (!(process.env.PORT && process.env.CLIENT_ORIGIN_URL)) {
 const PORT = parseInt(process.env.PORT, 10);
 const CLIENT_ORIGIN_URL = process.env.CLIENT_ORIGIN_URL;
 
+const allowedOrigins = [
+  CLIENT_ORIGIN_URL,
+  "chrome-extension://kkomglfeeehgbkbaemfpbjplgdolafih",
+  "chrome-extension://jklkhjfpoibimonkepmfiiebkpjiimkd",
+  "chrome-extension://banbdjjklhcjnjekdbjkdgkinfobejhg"
+];
+
 const app = express();
 const apiRouter = express.Router();
 
@@ -48,6 +55,8 @@ app.use((req, res, next) => {
 });
 app.use(nocache());
 
+// Old code test new code to minimize to this
+/*
 app.use(
   cors({
     origin: CLIENT_ORIGIN_URL,
@@ -56,9 +65,45 @@ app.use(
     maxAge: 86400,
   })
 );
+*/
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS Express API"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Authorization", "Content-Type"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    maxAge: 86400,
+  })
+)
+
+app.options(
+  '*',
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS Express API"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Authorization", "Content-Type"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    maxAge: 86400,
+  })
+);
 
 app.use("/api", apiRouter);
-apiRouter.use("/messages", messagesRouter);
+apiRouter.use("/messages", messagesRouter
+);
 
 app.use(errorHandler);
 app.use(notFoundHandler);
