@@ -1,5 +1,5 @@
 //TODO: better understand the navigate part of this code
-import { Auth0Provider, AppState, useAuth0 } from "@auth0/auth0-react";
+import { Auth0Provider, AppState } from "@auth0/auth0-react";
 import React, { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -22,6 +22,8 @@ export const Auth0ProviderWithNavigate = ({
     window.console.log({ domain, clientId, redirectUri, audience });
 
     const onRedirectCallback = async (appState?: AppState) => {
+        // TODO: figure out best way to send token to extension
+        /*
         const { getAccessTokenSilently, user } = useAuth0();
 
         const accessToken = await getAccessTokenSilently();
@@ -33,6 +35,7 @@ export const Auth0ProviderWithNavigate = ({
             user: user
         }, '*');
         console.log('accessToken sent to extension');
+        */
 
         navigate(appState?.returnTo || window.location.pathname);
     };

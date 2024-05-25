@@ -15,12 +15,12 @@
     "128": "images/happenstance-icon-128.png"
   },
   "permissions": [
-    "scripting",
     "history",
     "storage",
     "identity",
     "cookies",
-    "tabs"
+    "tabs",
+    "activeTab"
   ],
   "oauth2": {
     "client_id": "wfn5Nvd0yz9pKynMz4lSxCLpMthiN38c",
@@ -30,7 +30,23 @@
       "email"
     ]
   },
+  "background": {
+    "service_worker": "background.js"
+  },
   "host_permissions": [
     "http://localhost/*"
-  ]
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

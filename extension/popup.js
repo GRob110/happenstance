@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
     loginButton.addEventListener('click', () => {
         chrome.tabs.create({ url: LOGIN_URL });
         console.log('login clicked');

@@ -20,7 +20,8 @@ const CLIENT_ORIGIN_URL = process.env.CLIENT_ORIGIN_URL;
 
 const allowedOrigins = [
   CLIENT_ORIGIN_URL,
-  "chrome-extension://kkomglfeeehgbkbaemfpbjplgdolafih"
+  "chrome-extension://kkomglfeeehgbkbaemfpbjplgdolafih",
+  "chrome-extension://jklkhjfpoibimonkepmfiiebkpjiimkd"
 ];
 
 const app = express();
