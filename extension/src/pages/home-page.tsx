@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 window.console.log('home-page.tsx');
 
+// TODO: if logged out on website, need to logout here
+// TODO: need to break this out into a separate components and services
 export const HomePage: React.FC = () => {
   //const [message, setMessage] = useState<string>('');
   const [messageStored, setMessageStored] = useState<string>('');
