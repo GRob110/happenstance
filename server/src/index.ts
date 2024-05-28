@@ -6,6 +6,7 @@ import nocache from "nocache";
 import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
+import { userRouter } from "./users/user.router";
 
 dotenv.config();
 
@@ -101,8 +102,8 @@ app.options(
 );
 
 app.use("/api", apiRouter);
-apiRouter.use("/messages", messagesRouter
-);
+apiRouter.use("/messages", messagesRouter);
+apiRouter.use("/users", userRouter);
 
 app.use(errorHandler);
 app.use(notFoundHandler);
