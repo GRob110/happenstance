@@ -6,7 +6,7 @@ import nocache from "nocache";
 import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
-import { userRouter } from "./users/user.router";
+import userRouter from "./users/user.router";
 
 dotenv.config();
 

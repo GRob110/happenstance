@@ -9,7 +9,8 @@ export class UserService {
     }
 
     public async getUser(userId: string): Promise<User | null> {
-        return this.db.collection('users').findOne({ userId });
+        const user = await this.db.collection('users').findOne({ userId });
+        return user as User | null;
     }
 
     public async saveUser(user: User): Promise<void> {
