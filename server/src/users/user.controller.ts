@@ -9,6 +9,18 @@ export class UserController {
         this.userService = userService;
     }
 
+    public getAllUsers = async (req: Request, res: Response): Promise<void> => {
+        console.log('Received request for all users');
+        try {
+            const users = await this.userService.getAllUsers();
+            console.log('Users found: ', users);
+            res.json(users);
+        } catch (error) {
+            console.error('Error getting users: ', error);
+            res.status(500).send('Error getting users');
+        }
+    }
+    
     public getUser = async (req: Request, res: Response): Promise<void> => {
         const userId = req.params.userId;
         console.log('Received request for user with userId: ', userId);
