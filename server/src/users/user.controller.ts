@@ -11,17 +11,32 @@ export class UserController {
 
     public getUser = async (req: Request, res: Response): Promise<void> => {
         const userId = req.params.userId;
-        const user = await this.userService.getUser(userId);
-        if (user) {
-            res.json(user);
-        } else {
-            res.status(404).send('User not found');
+        console.log('Received request for user with userId: ', userId);
+        try {
+            const user = await this.userService.getUser(userId);
+            if (user) {
+                console.log('User found: ', user);
+                res.json(user);
+            } else {
+                console.log('User not found');
+                res.status(404).send('User not found');
+            }
+        } catch (error) {
+            console.error('Error getting user: ', error);
+            res.status(500).send('Error getting user');
         }
     }
 
     public async saveUser(req: Request, res: Response): Promise<void> {
         const user: User = req.body;
-        await this.userService.saveUser(user);
-        res.status(200).json({ message: 'User saved' });
+        console.log('Received request to save user: ', user);
+        try {
+            await this.userService.saveUser(user);
+            console.log('User saved');
+            res.status(200).json({ message: 'User saved' });
+        } catch (error) {
+            console.error('Error saving user: ', error);
+            res.status(500).send('Error saving user');
+        }
     }
 }

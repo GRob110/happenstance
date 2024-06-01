@@ -8,5 +8,3 @@ The server uses ExpressJS with Typescript.
 The extension uses React with Vite and Typescript and is currently designed for Google Chrome.
 
 Auth0 is used for authentication and MongoDB is used for the database.
-
-Run npm install in server, client, and extension.

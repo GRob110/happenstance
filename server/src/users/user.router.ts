@@ -10,7 +10,8 @@ connectToDb().then((db) => {
     const userController = new UserController(userService);
 
     userRouter.get('/:userId', (req, res) => userController.getUser(req, res));
-    userRouter.post('/', (req, res) => userController.saveUser(req, res));
+    userRouter.put('/:userId', (req, res) => userController.saveUser(req, res));
+    console.log('userRouter connected');
 });
 
 export default userRouter;
