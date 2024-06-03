@@ -6,5 +6,5 @@ export interface User {
     name: string;
     email: string;
     friends: string[];
-    browsingHistory: { url: string; timestamp: Date }[];
+    browsingHistory: { url: string; timestamp: Date , title: string}[];
 }

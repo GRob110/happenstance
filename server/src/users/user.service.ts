@@ -32,4 +32,14 @@ export class UserService {
         );
         console.log('User saved');
     }
+
+    public async saveHistory(userId: string, history: { url: string, timestamp: Date, title: string }): Promise<void> {
+        console.log('Saving history for user: ', userId);
+        await this.db.collection('users').updateOne(
+            { userId },
+            { $push: { browsingHistory: history } as any},
+            { upsert: true }
+        );
+        console.log('History saved');
+    }
 }

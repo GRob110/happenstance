@@ -51,4 +51,18 @@ export class UserController {
             res.status(500).send('Error saving user');
         }
     }
+
+    public async saveHistory(req: Request, res: Response): Promise<void> {
+        const userId = req.params.userId;
+        const { url, timestamp, title } = req.body.history;
+        console.log('Received request to save history by user: ', userId);
+        try {
+            await this.userService.saveHistory(userId, {url, timestamp, title});
+            console.log('History saved');
+            res.status(200).json({ message: 'History saved' });
+        } catch (error) {
+            console.error('Error saving history: ', error);
+            res.status(500).send('Error saving history');
+        }
+    }
 }
