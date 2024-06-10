@@ -52,7 +52,7 @@ export const HomePage: React.FC = () => {
         window.postMessage({ 
           type: 'STORE_TOKEN',
           token: accessToken,
-          user: user
+          userId: user.sub,
         }, '*');
 
         if (!isMounted) {

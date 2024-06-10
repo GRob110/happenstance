@@ -13,7 +13,6 @@ connectToDb().then((db) => {
     userRouter.get('/:userId', (req, res) => userController.getUser(req, res));
     userRouter.put('/:userId', (req, res) => userController.saveUser(req, res));
     userRouter.post('/:userId/history', (req, res) => userController.saveHistory(req, res));
-    console.log('userRouter connected');
 });
 
 export default userRouter;

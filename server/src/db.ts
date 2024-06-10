@@ -14,7 +14,6 @@ export const connectToDb = async (): Promise<Db> => {
         try {
             await client.connect();
             db = client.db('happenstance_db');
-            console.log('db connected');
         } catch (error) {
             console.error('Error connecting to the database', error);
         }

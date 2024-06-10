@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
-//import { useAuth0 } from '@auth0/auth0-react';
-//import { getProtectedResource } from '../services/message.service';
-
-window.console.log('home-page.tsx');
 
 // TODO: if logged out on website, need to logout here
 // TODO: need to break this out into a separate components and services
 export const HomePage: React.FC = () => {
-  //const [message, setMessage] = useState<string>('');
   const [messageStored, setMessageStored] = useState<string>('');
   const [userInfo, setUserInfo] = useState<string>('');
   const [authToken, setAuthToken] = useState<string>('');
@@ -18,26 +13,34 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     chrome.storage.local.get(['authToken'], (result) => {
-      console.log('authToken', result.authToken);
       if (result.authToken) {
         setAuthToken(result.authToken);
-        console.log('authToken gotten', result.authToken);
+        console.log('authToken gotten in homepage');
       } else {
         console.log('authToken not gotten');
       }
     });
   }, []);
 
+  useEffect(() => {
+    chrome.storage.local.get(['userId'], (result) => {
+      if (result.userId) {
+        console.log('userId gotten in homepage');
+      } else {
+        console.log('userId not gotten');
+      }
+    });
+  }, []);
+
   function login() {
     chrome.tabs.create({ url: login_url });
-    console.log('login clicked');
   };
 
   function logout() {
     chrome.tabs.create({ url: login_url });
     chrome.storage.local.remove(['authToken']);
+    chrome.storage.local.remove(['userId']);
     setAuthToken('');
-    console.log('logout clicked');
   };
 
   useEffect(() => {
@@ -55,7 +58,6 @@ export const HomePage: React.FC = () => {
     const getMessageStored = async (authToken: string) => {
       if (!isMounted) return;
 
-      console.log('fetching message');
       try {
         const response = await fetch(`${server_url}/api/messages/protected`, {
           headers: {
@@ -68,12 +70,10 @@ export const HomePage: React.FC = () => {
           throw new Error('Network response was not ok');  
         }
         const data = await response.json();
-        console.log('message info', data);
         setMessageStored(JSON.stringify(data, null, 2));
         return data;
       } catch (error) {
         setMessageStored(JSON.stringify(error, null, 2));
-        console.error('There has been a problem with your fetch operation:', error);
         return error;
       }
     }
@@ -82,7 +82,6 @@ export const HomePage: React.FC = () => {
     const getUserInfo = async (authToken: string) => {
       if (!isMounted) return;
 
-      console.log('fetching message');
       try {
         const response = await fetch(`https://${domain}/userinfo`, {
           headers: {
@@ -95,12 +94,10 @@ export const HomePage: React.FC = () => {
           throw new Error('Network response was not ok');  
         }
         const data = await response.json();
-        console.log('message info', data);
         setUserInfo(JSON.stringify(data, null, 2));
         return data;
       } catch (error) {
         setUserInfo(JSON.stringify(error, null, 2));
-        console.error('There has been a problem with your fetch operation:', error);
         return error;
       }
     }
@@ -113,11 +110,6 @@ export const HomePage: React.FC = () => {
       isMounted = false;
     };
   }, [authToken]);
-
-  console.log('Home.tsx rendered');
-  console.log("messageStored :", messageStored);
-  console.log("userInfo :", userInfo);
-  console.log("authToken :", authToken);
 
   return (
     <div className="content-layout">
