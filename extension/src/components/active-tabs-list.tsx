@@ -7,12 +7,16 @@ export const ActiveTabsList: React.FC = () => {
 
   useEffect(() => {
     const fetchActiveTabs = async () => {
-      const accessToken = await getAccessToken();
-      const userId = await getUserId();
-      const tabs = await getActiveTabs(userId, accessToken);
-      if (tabs.data) {
-        const parsedData = JSON.parse(tabs.data.text); //should be an array
-        setActiveTabs(parsedData);
+      try {
+        const accessToken = await getAccessToken();
+        const userId = await getUserId();
+        const tabs = await getActiveTabs(userId, accessToken);
+        console.log('Active tabs fetched:', tabs.data);
+        if (Array.isArray(tabs.data)) {
+          setActiveTabs(tabs.data);
+        }
+      } catch (error) {
+        console.log('Error fetching active tabs:', error);
       }
     };
 

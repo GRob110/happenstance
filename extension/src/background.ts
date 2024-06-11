@@ -24,7 +24,7 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
             }
         });
     } catch (error) {
-        console.error('Error in onActivated event:', error);
+        console.log('Error in onActivated event:', error);
     }
 });
 
@@ -42,7 +42,7 @@ chrome.idle.onStateChanged.addListener(async (state) => {
             }, accessToken);
         }
     } catch (error) {
-        console.error('Error in onStateChanged event:', error);
+        console.log('Error in onStateChanged event:', error);
     }
 });
 
@@ -66,6 +66,6 @@ chrome.history.onVisited.addListener(async (historyItem) => {
             accessToken
         );
     } catch (error) {
-        console.error('Error in onVisited event:', error);
+        console.log('Error in onVisited event:', error);
     }
 });

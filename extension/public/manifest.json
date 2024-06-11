@@ -20,7 +20,8 @@
     "identity",
     "cookies",
     "tabs",
-    "activeTab"
+    "activeTab",
+    "idle"
   ],
   "oauth2": {
     "client_id": "wfn5Nvd0yz9pKynMz4lSxCLpMthiN38c",
@@ -31,7 +32,8 @@
     ]
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "host_permissions": [
     "http://localhost/*"

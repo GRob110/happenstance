@@ -7,15 +7,19 @@ export const Profile: React.FC = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const accessToken = await getAccessToken();
-      const userId = await getUserId();
-      const userData = await getUserData(userId, accessToken);
-      setUserInfo(userData);
+        try {
+            const accessToken = await getAccessToken();
+            const userId = await getUserId();
+            const userData = await getUserData(userId, accessToken);
+            setUserInfo(userData.data);
+        } catch (error) {
+            console.log('Error fetching user information:', error);
+        }
     };
 
     fetchUserInfo();
   }, []);
-  
+
   return (
     <div>
       {userInfo ? (

@@ -12,8 +12,12 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     const fetchAccessToken = async () => {
-      const accessToken = await getAccessToken();
-      setAccessToken(accessToken);
+      try {
+        const accessToken = await getAccessToken();
+        setAccessToken(accessToken);
+      } catch (error) {
+        console.log('Error fetching access token:', error);
+      }
     };
 
     fetchAccessToken();
