@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PageLayout } from "../components/page-layout";
-import { getProtectedResource } from "../services/message.service";
-import { getAllUsers, getUserData, saveUserData } from "../services/user.service";
+import { saveUserData } from "../services/user.service";
 import { PageLoader } from "../components/page-loader";
+import { Profile } from "../components/profile";
 import '../styles/main.css';
-
-window.console.log('home-page.tsx');
+import { UserHistory } from "../components/user-history";
+import { AllUsersList } from "../components/all-users-list";
+import { FriendsLocations } from "../components/friends-locations";
 
 export const HomePage: React.FC = () => {
-  const [userData, setUserData] = useState<any>(null);
-  const [protectedMessage, setProtectedMessage] = useState<string>("");
-  const [allUsers, setAllUsers] = useState<any[]>([]);
   const { getAccessTokenSilently, isAuthenticated, user, isLoading } = useAuth0();
 
   useEffect(() => {
     let isMounted = true;
 
-    const fetchUserDatandMessage = async () => {
+    const fetchToken = async () => {
       if (!isAuthenticated || !user || !user.sub) {
         console.log('User not authenticated');
         return;
@@ -25,8 +23,9 @@ export const HomePage: React.FC = () => {
 
       try {
         const accessToken = await getAccessTokenSilently();
-        console.log('accessToken: ', accessToken);
 
+        // Initialize user when first logging in
+        // TODO: is there a better place to do this?
         await saveUserData(
           user.sub, 
           { 
@@ -38,18 +37,7 @@ export const HomePage: React.FC = () => {
           accessToken
         );
 
-        console.log('Saved user data');
-
-        const [
-          { data: userData, error: userError }, 
-          { data: messageData, error: messageError },
-          { data: usersData, error: usersError}
-        ] = await Promise.all([
-          getUserData(user.sub, accessToken),
-          getProtectedResource(accessToken),
-          getAllUsers(accessToken),
-        ]);
-
+        // Send token to the browser extension
         window.postMessage({ 
           type: 'STORE_TOKEN',
           token: accessToken,
@@ -60,62 +48,19 @@ export const HomePage: React.FC = () => {
           return;
         }
 
-        if (userData) {
-          setUserData(userData);
-          console.log('Fetched user data: ', userData);
-        } else if (userError) {
-          console.error(userError);
-        }
-
-        if (messageData) {
-          setProtectedMessage(JSON.stringify(messageData, null, 2));
-        } else if (messageError) {
-          console.log(JSON.stringify(messageError, null, 2));
-        }
-
-        if (Array.isArray(usersData)) {
-          setAllUsers(usersData);
-          console.log('Fetched all users: ', usersData);
-        } else if (usersError) {
-          console.error(usersError);
-        }
-
       } catch (error: any) {
-        console.error(error);
+        console.log("error in fetch token: ", error);
       }
     };
 
     if (isAuthenticated && user && user.sub) {
-      fetchUserDatandMessage();
+      fetchToken();
     }
 
     return () => {
       isMounted = false;
     };
   }, [getAccessTokenSilently, isAuthenticated, user]);
-
-  console.log('isAuthenticated: ', isAuthenticated);
-  console.log('message: ', protectedMessage);
-
-  // Function to handle the addition of a new friend to the user's friend list
-  const handleAddFriend = async (friendUserId: string) => {
-    try {
-      // Retrieve the access token
-      const accessToken = await getAccessTokenSilently();
-      // Create an updated user object with the new friend added to the friends list
-      const updatedUser = {
-        ...userData,
-        friends: [...(userData.friends || []), friendUserId],
-      };
-      // Save the updated user data to the server
-      await saveUserData(user!.sub!, updatedUser, accessToken);
-      // Update the local user data state with the new friend added
-      setUserData(updatedUser);
-    } catch (error) {
-      // Log any errors that occur during the friend addition process
-      console.error('Error adding friend', error);
-    }
-  };
 
   if (isLoading) {
     return <PageLoader />;
@@ -129,39 +74,15 @@ export const HomePage: React.FC = () => {
           </h1>
           {isAuthenticated && (
             <div className="content__body">
-              <p id="page-description">
-                <span>
-                  Welcome, {userData ? userData.name : 'Guest'}!
-                </span>
-              </p>
-              <div>
-                <p>
-                Here is your user information:
-                </p>
-                <pre>{userData && JSON.stringify(userData, null, 2)}</pre>
-              </div>
-              <div>
-                <p>
-                Here is your protected message:
-                </p>
-                <pre>{protectedMessage}</pre>
-              </div>
-              <h2>All Users</h2>
-              <ul>
-                {allUsers.map((u) => (
-                  <li key={u.userId}>
-                    {u.name} ({u.email}){' '}
-                    {userData && userData.friends && !userData.friends.includes(u.userId) && (
-                      <button onClick={() => handleAddFriend(u.userId)}>Add Friend</button>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              <Profile />
+              <UserHistory />
+              <AllUsersList />
+              <FriendsLocations />
             </div>
           )}
           {!isAuthenticated && (
             <div className="content__body">
-              <p>Please login to see your user information and protected message.</p>
+              <p>Please login or sign up!</p>
             </div>
           )}
         </div>

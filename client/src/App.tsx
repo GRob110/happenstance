@@ -20,8 +20,6 @@ export const App: React.FC = () => {
     );
   }
 
-  window.console.log('app.tsx rendered');
-
   /*
       <Route
         path="/"

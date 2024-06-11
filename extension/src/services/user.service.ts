@@ -104,4 +104,4 @@ export const getActiveTabs = async (userId: string, accessToken: string): Promis
     const { data, error } = await callExternalApi({ config });
 
     return { data, error };
-}
+};
