@@ -49,6 +49,28 @@ export const saveUserData = async (userId: string, userData: any, accessToken: s
     return { data, error };
 };
 
+export const saveActiveTab = async (
+    userId: string,
+    activeTab: { url: string, timestamp: Date, title: string },
+    accessToken: string
+): Promise<ApiResponse> => {
+    const config: AxiosRequestConfig = {
+        url: `${apiServerUrl}/api/users/${userId}/activeTab`,
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+            activeTab,
+        },
+    }
+
+    const { data, error } = (await callExternalApi({ config })) as ApiResponse;
+
+    return { data, error };
+};
+
 export const getActiveTabs = async (userId: string, accessToken: string): Promise<ApiResponse> => {
     const config: AxiosRequestConfig = {
         url: `${apiServerUrl}/api/users/${userId}/activeTabs`,
@@ -61,4 +83,18 @@ export const getActiveTabs = async (userId: string, accessToken: string): Promis
     const { data, error } = await callExternalApi({ config });
 
     return { data, error };
+};
+
+export const getMostRecentActiveTab = async (userId: string, accessToken: string): Promise<any> => {
+  const config: AxiosRequestConfig = {
+    url: `${apiServerUrl}/api/users/${userId}/mostRecentActiveTab`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  const { data, error } = await callExternalApi({ config });
+
+  return { data, error };
 };

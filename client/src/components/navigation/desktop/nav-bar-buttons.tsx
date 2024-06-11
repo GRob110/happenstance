@@ -3,6 +3,7 @@ import React from "react";
 import { LoginButton } from "../../buttons/login-button";
 import { LogoutButton } from "../../buttons/logout-button";
 import { SignupButton } from "../../buttons/signup-button";
+import { OnlineOfflineToggle } from "../../buttons/online-offline-toggle";
 
 window.console.log('nav-bar-buttons.tsx');
 
@@ -19,6 +20,7 @@ export const NavBarButtons: React.FC = () => {
       )}
       {isAuthenticated && (
         <>
+          <OnlineOfflineToggle />
           <LogoutButton />
         </>
       )}

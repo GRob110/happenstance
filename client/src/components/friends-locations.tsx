@@ -31,6 +31,7 @@ export const FriendsLocations: React.FC = () => {
     if (isAuthenticated && user && user.sub) {
       fetchActiveTabs();
     }
+    //TODO: does not update when friend changes location
   }, [getAccessTokenSilently, isAuthenticated, user]);
 
   return (

@@ -80,4 +80,18 @@ export class UserController {
             res.status(500).send('Error getting active tabs');
         }
     }
+
+    public async getMostRecentActiveTab(req: Request, res: Response): Promise<void> {
+        const userId = req.params.userId;
+        try {
+            const user = await this.userService.getUser(userId);
+            if (user && user.history.length > 0) {
+                res.json(user.history[0]);
+            } else {
+                res.status(404).send('No active tab found');
+            }
+        } catch (error) {
+            res.status(500).send('Error getting most recent active tab');
+        }
+    }
 }

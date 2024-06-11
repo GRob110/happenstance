@@ -15,6 +15,7 @@ connectToDb().then((db) => {
     userRouter.post('/:userId/history', (req, res) => userController.saveHistory(req, res));
     userRouter.post('/:userId/activeTab', (req, res) => userController.saveActiveTab(req, res));
     userRouter.get('/:userId/activeTabs', (req, res) => userController.getActiveTabs(req, res));
+    userRouter.get('/:userId/mostRecentActiveTab', (req, res) => userController.getMostRecentActiveTab(req, res));
 });
 
 export default userRouter;
