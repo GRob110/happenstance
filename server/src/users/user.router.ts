@@ -13,6 +13,8 @@ connectToDb().then((db) => {
     userRouter.get('/:userId', (req, res) => userController.getUser(req, res));
     userRouter.put('/:userId', (req, res) => userController.saveUser(req, res));
     userRouter.post('/:userId/history', (req, res) => userController.saveHistory(req, res));
+    userRouter.post('/:userId/activeTab', (req, res) => userController.saveActiveTab(req, res));
+    userRouter.get('/:userId/activeTabs', (req, res) => userController.getActiveTabs(req, res));
 });
 
 export default userRouter;

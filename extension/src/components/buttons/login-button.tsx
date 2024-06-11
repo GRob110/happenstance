@@ -1,22 +1,11 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
 
 export const LoginButton: React.FC = () => {
-  const { loginWithRedirect } = useAuth0();
+  const loginUrl = import.meta.env.VITE_AUTH0_LOGIN_URL;
 
-  const handleLogin = async () => {
-    await loginWithRedirect({
-      appState: {
-        returnTo: "/callback",
-      },
-      authorizationParams: {
-        prompt: "login",
-      },
-    });
-  };
-
+  // TODO put this in handle function
   return (
-    <button className="button__login" onClick={handleLogin}>
+    <button onClick={() => chrome.tabs.create({ url: loginUrl })}>
       Log In
     </button>
   );

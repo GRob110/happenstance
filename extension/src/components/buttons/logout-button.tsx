@@ -1,19 +1,14 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
 
 export const LogoutButton: React.FC = () => {
-  const { logout } = useAuth0();
+  const logoutUrl = import.meta.env.VITE_AUTH0_LOGIN_URL;
 
-  const handleLogout = () => {
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin,
-      },
-    });
-  };
+  // TODO put this in handle function
+  chrome.storage.local.remove(['authToken']);
+  chrome.storage.local.remove(['userId']);
 
   return (
-    <button className="button__logout" onClick={handleLogout}>
+    <button onClick={() => chrome.tabs.create({ url: logoutUrl })}>
       Log Out
     </button>
   );

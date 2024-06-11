@@ -1,48 +1,62 @@
 import { saveHistory } from "./services/user.service";
+import { saveActiveTab } from "./services/user.service";
+import { getAccessToken, getUserId } from "./services/storage.service";
+
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+    try {
+        const accessToken = await getAccessToken();
+        const userId = await getUserId();
+        if (!accessToken || !userId) return;
+
+        chrome.tabs.get(activeInfo.tabId, async (tab) => {
+            if (!tab.url) {
+                await saveActiveTab(userId, {
+                    url: "offline",
+                    timestamp: new Date(),
+                    title: "offline",
+                }, accessToken);
+            } else {
+                await saveActiveTab(userId, {
+                    url: tab.url,
+                    timestamp: new Date(),
+                    title: tab.title ?? "No Title",
+                }, accessToken);
+            }
+        });
+    } catch (error) {
+        console.error('Error in onActivated event:', error);
+    }
+});
+
+chrome.idle.setDetectionInterval(15 * 60); // 15 min
+chrome.idle.onStateChanged.addListener(async (state) => {
+    try {
+        const accessToken = await getAccessToken();
+        const userId = await getUserId();
+
+        if (state === "idle" || state === "locked") {
+            await saveActiveTab(userId, {
+                url: "offline",
+                timestamp: new Date(),
+                title: "offline",
+            }, accessToken);
+        }
+    } catch (error) {
+        console.error('Error in onStateChanged event:', error);
+    }
+});
 
 chrome.history.onVisited.addListener(async (historyItem) => {
-    const url = historyItem.url ?? ""; 
-    const lastVisitTime = historyItem.lastVisitTime ?? Date.now();
-    const title = historyItem.title ?? "No Title"; 
-
-    console.log('History visited: ', url, lastVisitTime, title);
-
     try {
-        const accessToken = await new Promise<string>((resolve, reject) => {
-            chrome.storage.local.get('authToken', (result) => {
-                if (typeof result.authToken === 'string' && result.authToken) {
-                    resolve(result.authToken);
-                    console.log('authToken gotten in bg');
-                } else {
-                    reject('No access token found');
-                }
-            });
-        });
-        const userId = await new Promise<string>((resolve, reject) => {
-            chrome.storage.local.get('userId', (result) => {
-                if (typeof result.userId === 'string' && result.userId) {
-                    resolve(result.userId);
-                    console.log('userId gotten in bg');
-                } else {
-                    reject('No user id found');
-                }
-            });
-        });
+        const url = historyItem.url ?? ""; 
+        const lastVisitTime = historyItem.lastVisitTime ?? Date.now();
+        const title = historyItem.title ?? "No Title"; 
 
-        console.log('Access token found: ', accessToken);
-        console.log('User id found: ', userId);
+        const accessToken = await getAccessToken();
+        const userId = await getUserId();
+        if (!accessToken || !userId) return;
 
-        if (!accessToken) {
-            console.error('No access token found!');
-            return;
-        }
-        
-        if (!userId) {
-            console.error('No userId found2!');
-            return;
-        }
-
-        const response = await saveHistory(
+        await saveHistory(
             userId, 
             {
                 url,
@@ -51,13 +65,7 @@ chrome.history.onVisited.addListener(async (historyItem) => {
             }, 
             accessToken
         );
-
-        if (response.error) {
-            console.error('Error saving history: ', response.error);
-        }
-
-        console.log('History sent: ', response.data);
     } catch (error) {
-        console.error('Error saving history: ', error);
+        console.error('Error in onVisited event:', error);
     }
 });

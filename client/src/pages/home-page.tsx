@@ -4,6 +4,7 @@ import { PageLayout } from "../components/page-layout";
 import { getProtectedResource } from "../services/message.service";
 import { getAllUsers, getUserData, saveUserData } from "../services/user.service";
 import { PageLoader } from "../components/page-loader";
+import '../styles/main.css';
 
 window.console.log('home-page.tsx');
 
@@ -96,19 +97,25 @@ export const HomePage: React.FC = () => {
   console.log('isAuthenticated: ', isAuthenticated);
   console.log('message: ', protectedMessage);
 
-  const handleAddFrend = async (friendUserId: string) => {
+  // Function to handle the addition of a new friend to the user's friend list
+  const handleAddFriend = async (friendUserId: string) => {
     try {
+      // Retrieve the access token
       const accessToken = await getAccessTokenSilently();
+      // Create an updated user object with the new friend added to the friends list
       const updatedUser = {
         ...userData,
         friends: [...(userData.friends || []), friendUserId],
       };
+      // Save the updated user data to the server
       await saveUserData(user!.sub!, updatedUser, accessToken);
+      // Update the local user data state with the new friend added
       setUserData(updatedUser);
-      } catch (error) {
-        console.error('Error adding friend',error);
-      }
-    };
+    } catch (error) {
+      // Log any errors that occur during the friend addition process
+      console.error('Error adding friend', error);
+    }
+  };
 
   if (isLoading) {
     return <PageLoader />;
@@ -145,7 +152,7 @@ export const HomePage: React.FC = () => {
                   <li key={u.userId}>
                     {u.name} ({u.email}){' '}
                     {userData && userData.friends && !userData.friends.includes(u.userId) && (
-                      <button onClick={() => handleAddFrend(u.userId)}>Add Friend</button>
+                      <button onClick={() => handleAddFriend(u.userId)}>Add Friend</button>
                     )}
                   </li>
                 ))}

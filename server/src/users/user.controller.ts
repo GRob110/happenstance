@@ -56,4 +56,28 @@ export class UserController {
             res.status(500).send('Error saving history');
         }
     }
+
+    public async saveActiveTab(req: Request, res: Response): Promise<void> {
+        const userId = req.params.userId;
+        const { url, timestamp, title } = req.body.activeTab;
+        console.log('Received request to save active tab by user: ', userId);
+        try {
+            await this.userService.saveActiveTab(userId, { url, timestamp, title });
+            console.log('Active tab saved');
+            res.status(200).json({ message: 'Active tab saved' });
+        } catch (error) {
+            console.error('Error saving active tab: ', error);
+            res.status(500).send('Error saving active tab');
+        }
+    }
+
+    public async getActiveTabs(req: Request, res: Response): Promise<void> {
+        const userId = req.params.userId;
+        try {
+            const activeTabs = await this.userService.getActiveTabs(userId);
+            res.json(activeTabs);
+        } catch (error) {
+            res.status(500).send('Error getting active tabs');
+        }
+    }
 }

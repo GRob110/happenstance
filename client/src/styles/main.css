@@ -1,7 +1,19 @@
 body {
     font-family: Helvetica, sans-serif;
-    margin: 10px;
-    width: 300px;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.content-layout {
+    padding: 20px;
+    margin: auto;
+    max-width: 800px;
+}
+
+.content__title {
+    color: #333;
+    text-align: center;
 }
 
 button {
@@ -17,18 +29,4 @@ button {
 
 button:hover {
     opacity: 0.8;
-}
-
-h1 {
-    color: #333;
-    font-size: 16px;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    padding: 5px 0;
 }
