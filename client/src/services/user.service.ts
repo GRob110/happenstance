@@ -1,7 +1,8 @@
 import { AxiosRequestConfig } from 'axios';
 import { ApiResponse } from '../models/api-response';
 import { ApiResponseUser } from '../models/api-response-user';
-import { callExternalApi, callExternalApiUser } from './external-api.service';
+import { callExternalApi, callExternalApiTab, callExternalApiUser } from './external-api.service';
+import { ApiResponseTab } from '../models/api-response-tab';
 
 const apiServerUrl = import.meta.env.VITE_APP_API_SERVER_URL;
 
@@ -85,7 +86,7 @@ export const getActiveTabs = async (userId: string, accessToken: string): Promis
     return { data, error };
 };
 
-export const getMostRecentActiveTab = async (userId: string, accessToken: string): Promise<any> => {
+export const getMostRecentActiveTab = async (userId: string, accessToken: string): Promise<ApiResponseTab> => {
   const config: AxiosRequestConfig = {
     url: `${apiServerUrl}/api/users/${userId}/mostRecentActiveTab`,
     method: "GET",
@@ -94,7 +95,7 @@ export const getMostRecentActiveTab = async (userId: string, accessToken: string
     },
   };
 
-  const { data, error } = await callExternalApi({ config });
+  const { data, error } = await callExternalApiTab({ config });
 
   return { data, error };
 };

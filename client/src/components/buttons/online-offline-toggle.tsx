@@ -17,16 +17,22 @@ export const OnlineOfflineToggle: React.FC = () => {
                     title: "offline",
                 };
             } else {
-                return await getMostRecentActiveTab(user!.sub!, accessToken);
+                const lastTab = await getMostRecentActiveTab(user!.sub!, accessToken);
+                console.log("lastTab: ", lastTab.data);
+                return lastTab.data;
             }
         }
         const activeTabData = await activeTab();
-        await saveActiveTab(user!.sub!, activeTabData, accessToken);
+        if (activeTabData) {
+            await saveActiveTab(user!.sub!, activeTabData, accessToken);
+        } else {
+            console.log("No active tab data");
+        }
     };
 
     return (
         <button onClick={handleToggle}>
-            {isOnline ? "Offline" : "Online"}
+            {isOnline ? "You're Offline" : "You're Online"}
         </button>
     );
 };
