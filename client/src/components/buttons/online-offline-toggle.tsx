@@ -18,7 +18,6 @@ export const OnlineOfflineToggle: React.FC = () => {
                 };
             } else {
                 const lastTab = await getMostRecentActiveTab(user!.sub!, accessToken);
-                console.log("lastTab: ", lastTab.data);
                 return lastTab.data;
             }
         }
@@ -31,8 +30,15 @@ export const OnlineOfflineToggle: React.FC = () => {
     };
 
     return (
-        <button onClick={handleToggle}>
-            {isOnline ? "You're Offline" : "You're Online"}
-        </button>
-    );
+     <label className="inline-flex items-center cursor-pointer">
+       <span className="relative">
+         <span className={`block w-10 h-6 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-300'}`}></span>
+         <span
+           className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform ${isOnline ? 'transform translate-x-4' : 'transform translate-x-0'}`}
+         ></span>
+       </span>
+       <span className="ml-3 text-gray-700">{isOnline ? "You're Online" : "You're Offline"}</span>
+       <input type="checkbox" className="hidden" onChange={handleToggle} checked={isOnline} />
+     </label>
+   );
 };
