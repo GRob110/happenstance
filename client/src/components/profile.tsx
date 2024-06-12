@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth0 } from "@auth0/auth0-react";
-import { getUserData } from '../services/user.service';
+import { useAuth0 } from '@auth0/auth0-react';
+import { getUserData } from '../services/user-service';
 
 export const Profile: React.FC = () => {
   const { getAccessTokenSilently, user } = useAuth0();
@@ -27,8 +27,12 @@ export const Profile: React.FC = () => {
       {userInfo ? (
         <div>
           <h3>User Information</h3>
-          <p><strong>Name:</strong> {userInfo.name}</p>
-          <p><strong>Email:</strong> {userInfo.email}</p>
+          <p>
+            <strong>Name:</strong> {userInfo.name}
+          </p>
+          <p>
+            <strong>Email:</strong> {userInfo.email}
+          </p>
           <img src={userInfo.picture} alt="Profile" />
         </div>
       ) : (

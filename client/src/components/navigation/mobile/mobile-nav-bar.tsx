@@ -1,24 +1,24 @@
-import React from "react";
-import { MobileMenuToggleButton } from "./mobile-menu-toggle-button";
-import { MobileNavBarBrand } from "./mobile-nav-bar-brand";
-import { MobileNavBarButtons } from "./mobile-nav-bar-buttons";
+import React from 'react';
+import { MobileMenuToggleButton } from './mobile-menu-toggle-button';
+import { MobileNavBarBrand } from './mobile-nav-bar-brand';
+import { MobileNavBarButtons } from './mobile-nav-bar-buttons';
 
 enum MobileMenuState {
-  CLOSED = "closed",
-  OPEN = "open",
+  CLOSED = 'closed',
+  OPEN = 'open',
 }
 
 enum MobileMenuIcon {
-  CLOSE = "close",
-  MENU = "menu",
+  CLOSE = 'close',
+  MENU = 'menu',
 }
 
 export const MobileNavBar: React.FC = () => {
   const [mobileMenuState, setMobileMenuState] = React.useState<MobileMenuState>(
-    MobileMenuState.CLOSED
+    MobileMenuState.CLOSED,
   );
   const [mobileMenuIcon, setMobileMenuIcon] = React.useState<MobileMenuIcon>(
-    MobileMenuIcon.MENU
+    MobileMenuIcon.MENU,
   );
 
   const isMobileMenuOpen = () => {
@@ -26,13 +26,13 @@ export const MobileNavBar: React.FC = () => {
   };
 
   const closeMobileMenu = () => {
-    document.body.classList.remove("mobile-scroll-lock");
+    document.body.classList.remove('mobile-scroll-lock');
     setMobileMenuState(MobileMenuState.CLOSED);
     setMobileMenuIcon(MobileMenuIcon.MENU);
   };
 
   const openMobileMenu = () => {
-    document.body.classList.add("mobile-scroll-lock");
+    document.body.classList.add('mobile-scroll-lock');
     setMobileMenuState(MobileMenuState.OPEN);
     setMobileMenuIcon(MobileMenuIcon.CLOSE);
   };

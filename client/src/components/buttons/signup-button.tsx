@@ -1,5 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import React from "react";
+import { useAuth0 } from '@auth0/auth0-react';
+import React from 'react';
 
 export const SignupButton: React.FC = () => {
   const { loginWithRedirect } = useAuth0();
@@ -7,11 +7,11 @@ export const SignupButton: React.FC = () => {
   const handleSignUp = async () => {
     await loginWithRedirect({
       appState: {
-        returnTo: "/callback",
+        returnTo: '/callback',
       },
       authorizationParams: {
-        prompt: "login",
-        screen_hint: "signup",
+        prompt: 'login',
+        screen_hint: 'signup',
       },
     });
   };

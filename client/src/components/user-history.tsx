@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth0 } from "@auth0/auth0-react";
-import { getUserData } from '../services/user.service';
+import { useAuth0 } from '@auth0/auth0-react';
+import { getUserData } from '../services/user-service';
 
 export const UserHistory: React.FC = () => {
   const { getAccessTokenSilently, user } = useAuth0();
@@ -31,9 +31,16 @@ export const UserHistory: React.FC = () => {
         <ul>
           {history.map((item, index) => (
             <li key={index}>
-              <p><strong>URL:</strong> {item.url}</p>
-              <p><strong>Title:</strong> {item.title}</p>
-              <p><strong>Timestamp:</strong> {new Date(item.timestamp).toLocaleString()}</p>
+              <p>
+                <strong>URL:</strong> {item.url}
+              </p>
+              <p>
+                <strong>Title:</strong> {item.title}
+              </p>
+              <p>
+                <strong>Timestamp:</strong>{' '}
+                {new Date(item.timestamp).toLocaleString()}
+              </p>
             </li>
           ))}
         </ul>

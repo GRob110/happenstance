@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { getAllUsers, getUserData, saveUserData } from '../services/user.service';
+import {
+  getAllUsers,
+  getUserData,
+  saveUserData,
+} from '../services/user-service';
 
 export const AllUsersList: React.FC = () => {
   const [userData, setUserData] = useState<any>(null);
   const [allUsers, setAllUsers] = useState<any[]>([]);
-  const { getAccessTokenSilently, isAuthenticated, user} = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
 
   useEffect(() => {
     const fetchAllUsers = async () => {
@@ -16,8 +20,12 @@ export const AllUsersList: React.FC = () => {
 
       try {
         const accessToken = await getAccessTokenSilently();
-        const { data: userData, error: userError } = await getUserData(user.sub, accessToken);
-        const { data: usersData, error: usersError } = await getAllUsers(accessToken);
+        const { data: userData, error: userError } = await getUserData(
+          user.sub,
+          accessToken,
+        );
+        const { data: usersData, error: usersError } =
+          await getAllUsers(accessToken);
 
         if (userData) {
           setUserData(userData);
@@ -32,16 +40,14 @@ export const AllUsersList: React.FC = () => {
         } else if (usersError) {
           console.error(usersError);
         }
-
       } catch (error: any) {
-        console.log("error in fetch all users: ", error);
+        console.log('error in fetch all users: ', error);
       }
     };
 
     if (isAuthenticated && user && user.sub) {
       fetchAllUsers();
     }
-
   }, [getAccessTokenSilently, isAuthenticated, user]);
 
   const handleAddFriend = async (friendUserId: string) => {
@@ -65,9 +71,13 @@ export const AllUsersList: React.FC = () => {
         {allUsers.map((u) => (
           <li key={u.userId}>
             {u.name} ({u.email}){' '}
-            {userData && userData.friends && !userData.friends.includes(u.userId) && (
-              <button onClick={() => handleAddFriend(u.userId)}>Add Friend</button>
-            )}
+            {userData &&
+              userData.friends &&
+              !userData.friends.includes(u.userId) && (
+                <button onClick={() => handleAddFriend(u.userId)}>
+                  Add Friend
+                </button>
+              )}
           </li>
         ))}
       </ul>

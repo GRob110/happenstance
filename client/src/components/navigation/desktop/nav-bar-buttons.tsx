@@ -1,11 +1,9 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import React from "react";
-import { LoginButton } from "../../buttons/login-button";
-import { LogoutButton } from "../../buttons/logout-button";
-import { SignupButton } from "../../buttons/signup-button";
-import { OnlineOfflineToggle } from "../../buttons/online-offline-toggle";
-
-window.console.log('nav-bar-buttons.tsx');
+import { useAuth0 } from '@auth0/auth0-react';
+import React from 'react';
+import { LoginButton } from '../../buttons/login-button';
+import { LogoutButton } from '../../buttons/logout-button';
+import { SignupButton } from '../../buttons/signup-button';
+import { OnlineOfflineToggle } from '../../buttons/online-offline-toggle';
 
 export const NavBarButtons: React.FC = () => {
   const { isAuthenticated } = useAuth0();

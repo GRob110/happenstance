@@ -1,7 +1,5 @@
-import React from "react";
-import { NavBar } from "./navigation/desktop/nav-bar";
-
-window.console.log('page-layout.tsx');
+import React from 'react';
+import { NavBar } from './navigation/desktop/nav-bar';
 
 interface Props {
   children: JSX.Element;

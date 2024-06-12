@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { getActiveTabs } from '../services/user.service';
+import { getActiveTabs } from '../services/user-service';
 
 export const FriendsLocations: React.FC = () => {
   const [activeTabs, setActiveTabs] = useState<any[]>([]);
@@ -15,7 +15,10 @@ export const FriendsLocations: React.FC = () => {
 
       try {
         const accessToken = await getAccessTokenSilently();
-        const { data: tabsData, error } = await getActiveTabs(user.sub, accessToken);
+        const { data: tabsData, error } = await getActiveTabs(
+          user.sub,
+          accessToken,
+        );
 
         if (Array.isArray(tabsData)) {
           setActiveTabs(tabsData);
@@ -41,9 +44,15 @@ export const FriendsLocations: React.FC = () => {
         <ul>
           {activeTabs.map((tab, index) => (
             <li key={index}>
-              <p><strong>Name:</strong> {tab.name}</p>
-              <p><strong>URL:</strong> {tab.activeTab?.url}</p>
-              <p><strong>Title:</strong> {tab.activeTab?.title}</p>
+              <p>
+                <strong>Name:</strong> {tab.name}
+              </p>
+              <p>
+                <strong>URL:</strong> {tab.activeTab?.url}
+              </p>
+              <p>
+                <strong>Title:</strong> {tab.activeTab?.title}
+              </p>
             </li>
           ))}
         </ul>

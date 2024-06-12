@@ -1,7 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-
-window.console.log('nav-bar-brand.tsx');
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export const NavBarBrand: React.FC = () => {
   return (
