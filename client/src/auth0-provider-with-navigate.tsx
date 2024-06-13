@@ -27,8 +27,6 @@ export const Auth0ProviderWithNavigate = ({
     return null;
   }
 
-  window.console.log('Auth0ProviderWithNavigate rendered');
-
   return (
     <Auth0Provider
       domain={DOMAIN}

@@ -1,0 +1,38 @@
+.nav-bar__container {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background-color: #333;
+  padding: 10px;
+  z-index: 1000;
+  height: 80px;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-bar__brand img {
+  height: 50px;
+  width: 50px;
+}
+
+.nav-bar__buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-bar__buttons button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.nav-bar__buttons button:hover {
+  background-color: #45a049;
+}

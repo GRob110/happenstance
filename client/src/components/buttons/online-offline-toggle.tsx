@@ -10,10 +10,11 @@ export const OnlineOfflineToggle: React.FC = () => {
   const { user, getAccessTokenSilently } = useAuth0();
 
   const handleToggle = async () => {
-    setIsOnline(!isOnline);
     const accessToken = await getAccessTokenSilently();
+    const newIsOnline = !isOnline;
+
     const activeTab = async () => {
-      if (!isOnline) {
+      if (!newIsOnline) {
         return {
           url: 'offline',
           timestamp: new Date(),
@@ -25,8 +26,9 @@ export const OnlineOfflineToggle: React.FC = () => {
       }
     };
     const activeTabData = await activeTab();
-    if (activeTabData) {
-      await saveActiveTab(user!.sub!, activeTabData, accessToken);
+    if (activeTabData && user && user.sub) {
+      await saveActiveTab(user.sub, activeTabData, accessToken);
+      setIsOnline(newIsOnline);
     } else {
       console.log('No active tab data');
     }

@@ -1,0 +1,14 @@
+button {
+  background-color: theme('colors.customGreen');
+  color: #f4f4f4;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 150px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: theme('colors.customGreenHover');
+}

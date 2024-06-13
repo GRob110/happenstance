@@ -102,6 +102,23 @@ export const getActiveTabs = async (
   return { data, error };
 };
 
+export const getActiveTab = async (
+  userId: string,
+  accessToken: string,
+): Promise<ApiResponseTab> => {
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER_URL}/api/users/${userId}/activeTab`,
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  const { data, error } = await callExternalApiTab({ config });
+
+  return { data, error };
+};
+
 export const getMostRecentActiveTab = async (
   userId: string,
   accessToken: string,

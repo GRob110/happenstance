@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { PageLayout } from '../components/page-layout';
-import { saveUserData } from '../services/user-service';
+import { getUserData, saveUserData } from '../services/user-service';
 import { PageLoader } from '../components/page-loader';
-import { Profile } from '../components/profile';
+import { Sidebar } from '../components/sidebar';
+import { Opening } from '../components/opening';
 import '../styles/main.css';
-import { UserHistory } from '../components/user-history';
 import { AllUsersList } from '../components/all-users-list';
-import { FriendsLocations } from '../components/friends-locations';
+import { UserHistory } from '../components/user-history';
 
 export const HomePage: React.FC = () => {
   const { getAccessTokenSilently, isAuthenticated, user, isLoading } =
@@ -24,16 +24,17 @@ export const HomePage: React.FC = () => {
 
       try {
         const accessToken = await getAccessTokenSilently();
+        const { data: existingUserData } = await getUserData(user.sub, accessToken);
 
         // Initialize user when first logging in
         // TODO: is there a better place to do this?
         await saveUserData(
           user.sub,
           {
-            userId: user.sub,
-            name: user.name,
-            email: user.email,
-            friends: [],
+            userId: existingUserData?.userId || user.sub,
+            name: existingUserData?.name || user.name,
+            email: existingUserData?.email || user.email,
+            friends: existingUserData?.friends || [],
           },
           accessToken,
         );
@@ -71,24 +72,20 @@ export const HomePage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div className="content-layout">
-        <h1 id="page-title" className="content__title">
-          Happenstance
-        </h1>
-        {isAuthenticated && (
-          <div className="content__body">
-            <Profile />
+      {isAuthenticated ? (
+        <>
+          <Sidebar />
+          <div className="main-content">
+            <h1 className="content__title text-center text-3xl font-bold my-6">
+              Happenstance
+            </h1>
             <UserHistory />
             <AllUsersList />
-            <FriendsLocations />
           </div>
-        )}
-        {!isAuthenticated && (
-          <div className="content__body">
-            <p>Please login or sign up!</p>
-          </div>
-        )}
-      </div>
+        </>
+      ) : (
+        <Opening />
+      )}
     </PageLayout>
   );
 };
