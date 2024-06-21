@@ -24,7 +24,7 @@
     "idle"
   ],
   "oauth2": {
-    "client_id": "wfn5Nvd0yz9pKynMz4lSxCLpMthiN38c",
+    "client_id": "YOUR_FIREBASE_CLIENT_ID",
     "scopes": [
       "openid",
       "profile",

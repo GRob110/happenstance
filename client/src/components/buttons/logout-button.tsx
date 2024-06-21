@@ -1,15 +1,14 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
 
 export const LogoutButton: React.FC = () => {
-  const { logout } = useAuth0();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin,
-      },
-    });
+    signOut(auth);
+    navigate('/');
   };
 
   return (

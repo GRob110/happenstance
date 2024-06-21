@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { getUserData } from '../services/user.service';
-import { getAccessToken, getUserId } from '../services/storage.service';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebaseConfig";
+import { getUserData } from "../services/user.service";
 
 export const Profile: React.FC = () => {
+  const [user] = useAuthState(auth);
   const [userInfo, setUserInfo] = useState<any>(null);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-        try {
-            const accessToken = await getAccessToken();
-            const userId = await getUserId();
-            const userData = await getUserData(userId, accessToken);
-            setUserInfo(userData.data);
-        } catch (error) {
-            console.log('Error fetching user information:', error);
-        }
+      if (user) {
+        const userData = await getUserData(user.uid);
+        setUserInfo(userData);
+      }
     };
-
     fetchUserInfo();
-  }, []);
+  }, [user]);
 
   return (
     <div>

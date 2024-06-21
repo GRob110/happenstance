@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate';
+import { AuthProviderWithNavigate } from './auth-provider-with-navigate';
 import './styles.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Auth0ProviderWithNavigate>
+      <AuthProviderWithNavigate>
         <App />
-      </Auth0ProviderWithNavigate>
+      </AuthProviderWithNavigate>
     </BrowserRouter>
   </React.StrictMode>,
 );

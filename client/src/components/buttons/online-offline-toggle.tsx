@@ -1,39 +1,38 @@
-import React, { useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import React, { useState, useEffect } from 'react';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from '../../firebase';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { doc } from 'firebase/firestore';
+import { db } from '../../firebase';
 import {
   saveActiveTab,
   getMostRecentActiveTab,
 } from '../../services/user-service';
 
+// TODO: update active tab when turned on with last active tab
+
 export const OnlineOfflineToggle: React.FC = () => {
+  const [user] = useAuthState(auth);
   const [isOnline, setIsOnline] = useState(true);
-  const { user, getAccessTokenSilently } = useAuth0();
+  const userDocRef = user ? doc(db, 'users', user.uid) : null;
+  const [userData] = useDocumentData(userDocRef);
+
+  useEffect(() => {
+    if (userData) {
+      setIsOnline(userData.activeTab.url !== 'offline');
+    }
+  }, [userData]);
 
   const handleToggle = async () => {
-    const accessToken = await getAccessTokenSilently();
     const newIsOnline = !isOnline;
 
-    const activeTab = async () => {
-      if (!newIsOnline) {
-        return {
-          url: 'offline',
-          timestamp: new Date(),
-          title: 'offline',
-        };
-      } else {
-        const lastTab = await getMostRecentActiveTab(user!.sub!, accessToken);
-        return lastTab.data;
+    if (user) {
+      const activeTab = newIsOnline ? await getMostRecentActiveTab(user.uid) : { url: 'offline', timestamp: new Date(), title: 'Offline' };
+      if (activeTab) {
+        await saveActiveTab(user.uid, activeTab);
       }
-    };
-    const activeTabData = await activeTab();
-    if (activeTabData && user && user.sub) {
-      await saveActiveTab(user.sub, activeTabData, accessToken);
-      setIsOnline(newIsOnline);
-    } else {
-      console.log('No active tab data');
     }
   };
-
   return (
     <label className="inline-flex items-center cursor-pointer">
       <span className="relative">

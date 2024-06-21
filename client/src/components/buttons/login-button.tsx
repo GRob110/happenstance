@@ -1,18 +1,12 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
-export const LoginButton: React.FC = () => {
-  const { loginWithRedirect } = useAuth0();
+import { useNavigate } from 'react-router-dom';
 
-  const handleLogin = async () => {
-    await loginWithRedirect({
-      appState: {
-        returnTo: '/callback',
-      },
-      authorizationParams: {
-        prompt: 'login',
-      },
-    });
+export const LoginButton: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate('/login');
   };
 
   return (

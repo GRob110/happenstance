@@ -1,32 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
-import { getUserData } from '../services/user-service';
+import React from 'react';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { auth, db } from "../firebase";
+import { doc } from "firebase/firestore";
 
 export const Profile: React.FC = () => {
-  const { getAccessTokenSilently, user } = useAuth0();
-  const [userInfo, setUserInfo] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        if (user && user.sub) {
-          const accessToken = await getAccessTokenSilently();
-          const { data } = await getUserData(user.sub, accessToken);
-          setUserInfo(data);
-        } else {
-          console.log('User information is not available.');
-        }
-      } catch (error) {
-        console.log('Error fetching user information:', error);
-      }
-    };
-
-    if (user) {
-      fetchUserInfo();
-      const interval = setInterval(fetchUserInfo, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [getAccessTokenSilently, user]);
+  const [user] = useAuthState(auth);
+  const userDocRef = user ? doc(db, "users", user.uid) : null;
+  const [userInfo] = useDocumentData(userDocRef);
 
   return (
     <div className="border border-gray-300 p-4 rounded-lg max-w-xs mx-auto">

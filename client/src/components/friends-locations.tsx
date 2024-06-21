@@ -1,41 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { getActiveTabs } from '../services/user-service';
+import { auth } from '../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export const FriendsLocations: React.FC = () => {
   const [activeTabs, setActiveTabs] = useState<any[]>([]);
-  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
     const fetchActiveTabs = async () => {
-      if (!isAuthenticated || !user || !user.sub) {
+      if (!user) {
         console.log('User not authenticated');
         return;
       }
 
       try {
-        const accessToken = await getAccessTokenSilently();
-        const { data: tabsData, error } = await getActiveTabs(
-          user.sub,
-          accessToken,
-        );
-
-        if (Array.isArray(tabsData)) {
-          setActiveTabs(tabsData);
-          console.log('Fetched active tabs: ', tabsData);
-        } else if (error) {
-          console.error(error);
-        }
-      } catch (error: any) {
-        console.log('Error fetching active tabs: ', error);
+        await getActiveTabs(user.uid, (tabsData) => {
+          if (Array.isArray(tabsData)) {
+            setActiveTabs(tabsData);
+            console.log('Fetched active tabs: ', tabsData);
+          }
+        })
+      } catch (error) {
+        console.error('Error fetching active tabs: ', error);
       }
     };
 
-    if (isAuthenticated && user && user.sub) {
+    if (user) {
       fetchActiveTabs();
     }
-    //TODO: does not update when friend changes location
-  }, [getAccessTokenSilently, isAuthenticated, user]);
+  }, [user]);
 
   return (
     <div>

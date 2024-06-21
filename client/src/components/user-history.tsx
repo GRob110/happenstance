@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
-import { getUserData } from '../services/user-service';
+import React from 'react';
+import { db } from '../firebase';
+import { auth } from '../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { doc } from 'firebase/firestore';
+import { Tab } from '../models/tab';
 
 export const UserHistory: React.FC = () => {
-  const { getAccessTokenSilently, user } = useAuth0();
-  const [history, setHistory] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchUserHistory = async () => {
-      try {
-        const accessToken = await getAccessTokenSilently();
-        const response = await getUserData(user!.sub!, accessToken);
-        if (response.data) {
-          setHistory(response.data.history || []);
-        }
-      } catch (error) {
-        console.log('Error fetching user history:', error);
-      }
-    };
-
-    if (user) {
-      fetchUserHistory();
-    }
-  }, [getAccessTokenSilently, user]);
+  const [user] = useAuthState(auth);
+  const userDocRef = user ? doc(db, 'users', user.uid) : null;
+  const [userData] = useDocumentData(userDocRef);
+  const history: Tab[] = userData?.history || [];
 
   return (
     <div>
