@@ -16,6 +16,20 @@ export const saveUserData = async (userId: string, userData: User) => {
   await setDoc(doc(db, "users", userId), userData, { merge: true });
 };
 
+export const saveFriend = async (userId: string, friendId: string) => {
+  const userDocRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userDocRef);
+  if (userDoc.exists()) {
+    const userData = userDoc.data() as User;
+    const friends = userData.friends || [];
+    if (!friends.includes(friendId)) {
+      friends.push(friendId);
+      await updateDoc(userDocRef, { friends });
+    }
+  }
+};
+
+
 // TODO: this is still a placeholder
 export const getAllUsers = async () => {
   const usersCollection = collection(db, "users");

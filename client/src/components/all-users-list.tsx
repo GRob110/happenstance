@@ -1,5 +1,5 @@
 import React from 'react';
-import { saveUserData } from '../services/user-service';
+import { saveFriend } from '../services/user-service';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import { useDocumentData, useCollectionData } from 'react-firebase-hooks/firestore';
@@ -13,33 +13,17 @@ export const AllUsersList: React.FC = () => {
   const usersCollectionRef = collection(db, 'users');
   const [allUsers] = useCollectionData(usersCollectionRef);
 
-  const handleAddFriend = async (friendUserId: string) => {
-    try {
-      const updatedUser = {
-        userId: userData?.userId,
-        name: userData?.name,
-        email: userData?.email,
-        friends: [...(userData?.friends || []), friendUserId],
-        history: userData?.history,
-        activeTab: userData?.activeTab,
-      };
-      await saveUserData(user!.uid, updatedUser);
-    } catch (error) {
-      console.error('Error adding friend', error);
-    }
-  };
-
   return (
     <div>
       <h2>All Users</h2>
       <ul>
-        {allUsers?.map((u) => (
+        {allUsers?.filter(u => u.userId !== user?.uid).map((u) => (
           <li key={u.userId}>
             {u.name} ({u.email}){' '}
             {userData &&
               userData.friends &&
               !userData.friends.includes(u.userId) && (
-                <button onClick={() => handleAddFriend(u.userId)}>
+                <button onClick={() => saveFriend(user!.uid, u.userId)}>
                   Add Friend
                 </button>
               )}
