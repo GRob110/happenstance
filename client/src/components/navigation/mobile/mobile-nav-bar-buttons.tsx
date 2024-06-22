@@ -1,25 +1,20 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import { LoginButton } from '../../buttons/login-button';
 import { LogoutButton } from '../../buttons/logout-button';
-import { SignupButton } from '../../buttons/signup-button';
+import { auth } from '../../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { OnlineOfflineToggle } from '../../buttons/online-offline-toggle';
 
 export const MobileNavBarButtons: React.FC = () => {
-  const { isAuthenticated } = useAuth0();
+  const [user] = useAuthState(auth);
 
   return (
     <div className="mobile-nav-bar__buttons">
-      {!isAuthenticated && (
-        <>
-          <SignupButton />
-          <LoginButton />
-        </>
-      )}
-      {isAuthenticated && (
-        <>
+      {!user ? <LoginButton /> : <>
+          <OnlineOfflineToggle />
           <LogoutButton />
         </>
-      )}
+      }
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Opening: React.FC = () => {
   return (
-    <div className="text-center flex flex-col justify-center items-center">
+    <div className="text-center flex flex-col justify-center items-center mt-20">
       <h1 className="content__title text-left text-3xl font-bold my-6">
         Happenstance
       </h1>

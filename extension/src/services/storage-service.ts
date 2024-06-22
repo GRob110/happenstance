@@ -1,0 +1,1 @@
+console.log('storage.service.ts');

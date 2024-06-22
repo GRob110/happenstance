@@ -74,3 +74,22 @@ export const getActiveTabs = (userId: string, callback: (tabs: { friendId: strin
     callback(friendsTabs.filter(tab => tab.activeTab !== null));
   });
 };
+
+export const saveHistory = async (userId: string, historyTab: Tab) => {
+  const userDocRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userDocRef);
+  if (!userDoc.exists()) return;
+
+  let history = userDoc.data().history || [];
+  if (history.length > 0 && history[history.length - 1].url === historyTab.url) {
+    // If the last URL is the same as the new one, do not add it to the history
+    return;
+  }
+
+  history.push(historyTab);
+  if (history.length > 10) {
+    history = history.slice(-10); // Keep only the last 10 entries
+  }
+
+  await updateDoc(userDocRef, { history });
+};

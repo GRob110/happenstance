@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getActiveTabs } from '../services/user-service';
 import { auth } from '../firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from 'react-firebase-hooks/auth/';
 
 export const FriendsLocations: React.FC = () => {
   const [activeTabs, setActiveTabs] = useState<any[]>([]);

@@ -1,27 +1,21 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import { LoginButton } from '../../buttons/login-button';
 import { LogoutButton } from '../../buttons/logout-button';
-import { SignupButton } from '../../buttons/signup-button';
 import { OnlineOfflineToggle } from '../../buttons/online-offline-toggle';
+import { auth } from '../../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export const NavBarButtons: React.FC = () => {
-  const { isAuthenticated } = useAuth0();
+  const [user] = useAuthState(auth);
 
   return (
     <div className="nav-bar__buttons">
-      {!isAuthenticated && (
-        <>
-          <SignupButton />
-          <LoginButton />
-        </>
-      )}
-      {isAuthenticated && (
-        <>
-          <OnlineOfflineToggle />
-          <LogoutButton />
-        </>
-      )}
+      {!user ? <>
+        <LoginButton />
+      </> : <>
+        <OnlineOfflineToggle />
+        <LogoutButton />
+      </>}
     </div>
   );
 };
