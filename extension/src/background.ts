@@ -1,9 +1,7 @@
-import { saveHistory, saveActiveTab } from "./services/user.service";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { saveHistory, saveActiveTab } from "./services/user-service";
+import { getAuth } from "firebase/auth/web-extension";
 
 const auth = getAuth();
-const db = getFirestore();
 
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   const user = auth.currentUser;

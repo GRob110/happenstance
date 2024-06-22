@@ -1,16 +1,15 @@
-import React from "react";
+import React from 'react';
+import { signOut } from 'firebase/auth/web-extension';
+import { auth } from '../../firebase';
 
 export const LogoutButton: React.FC = () => {
-  const logoutUrl = import.meta.env.VITE_APP_LOGIN_URL;
 
   const handleLogout = () => {
-    chrome.tabs.create({ url: logoutUrl });
-    chrome.storage.local.remove(['authToken']);
-    chrome.storage.local.remove(['userId']);
-  }
+    signOut(auth);
+  };
 
   return (
-    <button onClick={handleLogout}>
+    <button className="button__logout" onClick={handleLogout}>
       Log Out
     </button>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebaseConfig";
-import { getUserData } from "../services/user.service";
+import { auth } from "../firebase";
+import { getUserData } from "../services/user-service";
 
 export const Profile: React.FC = () => {
   const [user] = useAuthState(auth);
